@@ -4,7 +4,7 @@ class CreateGoals < ActiveRecord::Migration
       t.string :ref
       t.string :name
       t.string :description
-      t.string :value
+      t.integer :value
       t.string :event
 
       t.timestamps null: false

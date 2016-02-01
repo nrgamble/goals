@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160128144741) do
+ActiveRecord::Schema.define(version: 20160129190016) do
 
   create_table "goal_deps", force: :cascade do |t|
     t.integer  "goal_id"
@@ -23,7 +23,7 @@ ActiveRecord::Schema.define(version: 20160128144741) do
   create_table "goal_statuses", force: :cascade do |t|
     t.integer  "goal_id"
     t.string   "user_id"
-    t.string   "value"
+    t.integer  "value"
     t.boolean  "completed"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -32,7 +32,7 @@ ActiveRecord::Schema.define(version: 20160128144741) do
   create_table "goals", force: :cascade do |t|
     t.string   "name"
     t.string   "ref"
-    t.string   "value"
+    t.integer  "value"
     t.string   "event"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -41,7 +41,7 @@ ActiveRecord::Schema.define(version: 20160128144741) do
   create_table "progress", force: :cascade do |t|
     t.integer  "goal_id"
     t.string   "user_id"
-    t.string   "value"
+    t.integer  "value"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

@@ -6,7 +6,10 @@ Rails.application.routes.draw do
   resources :goals
 
   resources :goal_deps
+
+  post 'progress/event' => 'progress#event'
   resources :progress
+
   resources :goal_statuses
 
   # You can have the root of your site routed with "root"

@@ -2,10 +2,27 @@ class Progress < ActiveRecord::Base
 
   self.table_name = 'progress'
 
-  belongs_to :goal
+  belongs_to :goal, inverse_of: :progress
+
+  after_create :update_goal_status
 
   def self.get(goal_id, user_id)
     where(goal_id: goal_id, user_id: user_id)
   end
+
+  protected
+
+    # after_create
+    # TODO: do the same after creating a delete progress
+    def update_goal_status
+      status = goal.status(user_id)
+      if status.new_record?
+        status.goal_id = goal_id
+        status.user_id = user_id
+        status.value   = status.progress
+      end
+      status.value += value
+      status.save
+    end
 
 end
