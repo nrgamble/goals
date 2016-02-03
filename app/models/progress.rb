@@ -15,13 +15,8 @@ class Progress < ActiveRecord::Base
     # after_create
     # TODO: do the same after creating a delete progress
     def update_goal_status
-      status = goal.status(user_id)
-      if status.new_record?
-        status.goal_id = goal_id
-        status.user_id = user_id
-        status.value   = status.progress
-      end
-      status.value += value
+      status = self.goal.status(self.user_id)
+      status.value += self.value
       status.save
     end
 

@@ -17,7 +17,7 @@ class Goal < ActiveRecord::Base
   # Are all dependencies for this goal met?
   def deps_completed?(user_id)
     completed = true
-    deps.each do |dep|
+    self.deps.each do |dep|
       completed = false unless dep.status(user_id).completed
     end
     completed
@@ -25,23 +25,27 @@ class Goal < ActiveRecord::Base
 
   # Find the status of a goal for a user
   def status(user_id)
-    goal_status = goal_statuses.where(user_id: user_id).first
-    goal_status or GoalStatus.new
+    goal_status = self.goal_statuses.where(user_id: user_id).first
+    if goal_status.nil?
+      goal_status = GoalStatus.new(goal_id: self.id, user_id: user_id)
+      goal_status.value = goal_status.progress
+    end
+    goal_status
   end
 
-  # 
+  # GoalStatus:before_save, autocomplete this goal if dependency completion is only requirement
   def check_autocomplete(user_id)
     return self if not deps_completed?(user_id)
 
-    deps.each do |dep|
-      
-    end
+    goal_status = self.status(user_id)
+    goal_status.save if goal_status.is_completed?
+    return self
   end
 
   # Find all goals available to a user
   def self.all_available(user_id)
     _goals = []
-    goals  = Goal.all - all_completed(user_id)
+    goals  = Goal.all - self.all_completed(user_id)
     goals.each do |goal|
       _goals << goal if goal.deps_completed?(user_id)
     end
